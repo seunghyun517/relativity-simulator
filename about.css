@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+}
+
+h1 {
+    color: yellow;
+}
+
+h3 {
+    text-align: right;
+}
+
+div {
+    width: 75%;
+    margin: 0px auto;
+    padding: 40px 0px;
+    font-size: 1.15em;
+    color: white;
+}
+
+img {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+div a {
+    color: red;
+    font-size: 1.5em;
+}
+
+footer {
+    color: white;
+    background-color: rgb(2, 2, 56);
+    text-align: center;
+    padding: 15px;
+}
+
+footer a{
+    color: white;
+}
