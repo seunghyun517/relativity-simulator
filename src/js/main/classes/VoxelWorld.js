@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import texture from "../constants/texture";
 import doLengthContraction from "../functions/doLengthContraction";
 import applyRelativity2 from "../functions/applyRelativity2";
 

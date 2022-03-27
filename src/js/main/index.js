@@ -1,22 +1,15 @@
 import * as THREE from "three";
-
-import changeMode from "./functions/changeMode";
-import cameracontrols, { camera, canvas } from "./functions/cameracontrols";
-import {
-  tileSize,
-  tileTextureWidth,
-  tileTextureHeight,
-  chunkSize,
-  worldSize,
-  chunkSliceSize,
-} from "./constants";
+import { chunkSize, worldSize } from "./constants";
+import currentObjectId from "./controls/currentObjectId";
+import modeButton from "./controls/modeButton";
 import player from "./controls/player";
 import speedSlider from "./controls/speedSlider";
 import worlds from "./controls/worlds";
-import modeButton from "./controls/modeButton";
-import currentObjectId from "./controls/currentObjectId";
-import init from "./functions/init";
+import cameracontrols, { camera, canvas } from "./functions/cameracontrols";
+import changeMode from "./functions/changeMode";
 import createWorld from "./functions/createWorld";
+import init from "./functions/init";
+import worldNameForm from "./controls/worldNameForm";
 
 init();
 
@@ -88,12 +81,6 @@ function resizeRendererToDisplaySize(renderer) {
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("lightblue");
-
-const loader = new THREE.TextureLoader();
-
-const texture = loader.load(TextureImage);
-texture.magFilter = THREE.NearestFilter;
-texture.minFilter = THREE.NearestFilter;
 
 const sunlight = new THREE.DirectionalLight(0xffffff, 0.7);
 sunlight.position.set(15, 20, 10);

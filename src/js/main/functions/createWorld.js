@@ -1,5 +1,6 @@
 import VoxelWorld from "../classes/VoxelWorld";
 import { chunkSize } from "../constants";
+import worlds from "../controls/worlds";
 
 function createWorld({ ux, uy, uz, x, y, z }, objectId) {
   const newWorld = new VoxelWorld({
