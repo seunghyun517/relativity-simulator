@@ -1,6 +1,18 @@
 import * as THREE from "three";
-import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import * as texturePng from "../../../assets/img/texture.png";
+import TextureImage from "../../../assets/img/texture.png";
+import changeMode from "./functions/changeMode";
+import cameracontrols, { camera, canvas } from "./functions/cameracontrols";
+import {
+  tileSize,
+  tileTextureWidth,
+  tileTextureHeight,
+  chunkSize,
+  worldSize,
+  chunkSliceSize,
+} from "./constants";
+import player from "./controls/player";
+import speedSlider from "./controls/speedSlider";
+import worlds from "./controls/worlds";
 
 const c = 5;
 
@@ -15,7 +27,7 @@ const loadFileButton = document.getElementById("loadfileButton");
 loadFileButton.onclick = openFile;
 
 const mytimeElement = document.getElementById("mytime");
-const speedSlider = document.getElementById("speedslider");
+
 const speedOutput = document.getElementById("speedvalue");
 
 const instructions = document.getElementById("instructions");
@@ -43,37 +55,12 @@ objSubmit.onclick = setWorldVelocity;
 var editing = true;
 var usingRelativity = 0;
 var currentObjectId;
-const worlds = {};
+
 var worldNum = 0;
 var controllock = false;
 
 function lockControl() {
   controllock = true;
-}
-
-function changeMode() {
-  modeButton.blur();
-  if (modeButton.value == "Editing Mode") {
-    modeButton.value = "Viewing Mode";
-    modeButton.style.background = "red";
-    editing = false;
-    for (const world of Object.values(worlds)) {
-      world.setOpacity(1);
-    }
-    crossbar.style.display = "none";
-  } else {
-    modeButton.value = "Editing Mode";
-    modeButton.style.background = "white";
-    if (cameracontrols.isLocked) {
-      crossbar.style.display = "flex";
-    }
-    for (const world of Object.values(worlds)) {
-      world.setOpacity(0.3);
-    }
-    worlds[currentObjectId].setOpacity(1);
-    editing = true;
-    player.time = 0;
-  }
 }
 
 function changeView() {
@@ -204,21 +191,6 @@ function applyRelativity2(x0, y0, z0, vx, vy, vz, ux, uy, uz, tb) {
 }
 
 let controls = {};
-let player = {
-  x: 0,
-  y: 0,
-  z: 0,
-  height: 1.4,
-  maxSpeed: speedSlider.value * c,
-  acceleration: 0.2 * speedSlider.value * c,
-  vx: 0,
-  vy: 0,
-  vz: 0,
-  speed: 0,
-  beta: 0,
-  gamma: 1,
-  time: 0,
-};
 
 const dt = 0.04;
 
@@ -231,7 +203,6 @@ speedSlider.oninput = function () {
   speedSlider.blur();
 };
 
-const canvas = document.querySelector("#c");
 const renderer = new THREE.WebGLRenderer({ canvas });
 
 function resizeRendererToDisplaySize(renderer) {
@@ -245,30 +216,12 @@ function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
-// Scene: Setup
-const chunkSize = 32;
-const worldSize = 40;
-const chunkSliceSize = chunkSize * chunkSize;
-const fov = 75;
-const aspect = 2; // the canvas default
-const near = 0.1;
-const far = 1000;
-const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-// Camera:Setup
-camera.position.set(0, player.height, 0);
-camera.rotation.x = 0;
-camera.rotation.y = Math.PI;
-camera.rotation.z = 0;
-camera.rotation.order = "YXZ";
-
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("lightblue");
 
-const tileSize = 16;
-const tileTextureWidth = 256;
-const tileTextureHeight = 64;
 const loader = new THREE.TextureLoader();
-const texture = loader.load(texturePng);
+
+const texture = loader.load(TextureImage);
 texture.magFilter = THREE.NearestFilter;
 texture.minFilter = THREE.NearestFilter;
 
@@ -280,8 +233,6 @@ backlight.position.set(-20, 20, -5);
 scene.add(backlight);
 const backgroundlight = new THREE.AmbientLight(0xffffff, 0.2);
 scene.add(backgroundlight);
-
-const cameracontrols = new PointerLockControls(camera, canvas);
 
 instructions.addEventListener("click", function () {
   cameracontrols.lock();
